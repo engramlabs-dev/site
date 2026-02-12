@@ -4,14 +4,5 @@
 	"assets": {
 		"directory": "./public"
 	},
-	"routes": [
-		{
-			"pattern": "engramlabs.dev",
-			"custom_domain": true
-		},
-		{
-			"pattern": "www.engramlabs.dev",
-			"custom_domain": true
-		}
-	]
+	"workers_dev": true
 }
