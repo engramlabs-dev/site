@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Engram Labs — Production Infrastructure for AI Memory</title>
-    <meta name="description" content="Memory observability, lifecycle management, and evaluation for AI systems. The plumbing between research and production.">
+    <title>Engram Labs — Observability for AI Memory</title>
+    <meta name="description" content="See what your AI actually remembers. Retrieval quality, hit rates, staleness, dead memories — starting with Mem0.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
@@ -34,7 +34,6 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Subtle grain texture */
         body::before {
             content: '';
             position: fixed;
@@ -51,7 +50,6 @@
             padding: 0 24px;
         }
 
-        /* Header */
         header {
             padding: 48px 0 0;
             opacity: 0;
@@ -139,14 +137,54 @@
             max-width: 520px;
         }
 
-        /* Modules */
-        .modules {
+        /* Code block */
+        .code-section {
+            padding: 0 0 64px;
+            opacity: 0;
+            animation: fadeIn 0.8s ease 0.5s forwards;
+        }
+
+        .code-label {
+            font-size: 10px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--accent-dim);
+            margin-bottom: 12px;
+        }
+
+        .code-block {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 24px;
+            font-family: var(--mono);
+            font-size: 13px;
+            line-height: 1.7;
+            color: var(--text-muted);
+            overflow-x: auto;
+        }
+
+        .code-block .comment { color: #555; }
+        .code-block .keyword { color: var(--accent-dim); }
+        .code-block .string { color: #7a9a6a; }
+        .code-block .highlight { color: var(--text); }
+
+        /* Metrics */
+        .metrics {
             padding: 0 0 64px;
             opacity: 0;
             animation: fadeIn 0.8s ease 0.6s forwards;
         }
 
-        .module-grid {
+        .metrics-label {
+            font-size: 10px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--accent-dim);
+            margin-bottom: 16px;
+        }
+
+        .metric-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 1px;
@@ -156,36 +194,84 @@
             overflow: hidden;
         }
 
-        .module {
+        .metric {
             background: var(--surface);
-            padding: 28px 24px;
+            padding: 24px 20px;
             transition: background 0.3s;
         }
 
-        .module:hover {
+        .metric:hover {
             background: var(--accent-glow);
         }
 
-        .module-label {
+        .metric-name {
+            font-family: var(--serif);
+            font-size: 16px;
+            font-style: italic;
+            color: var(--text);
+            margin-bottom: 6px;
+        }
+
+        .metric-desc {
+            font-size: 11px;
+            line-height: 1.6;
+            color: var(--text-muted);
+        }
+
+        /* How it works */
+        .how {
+            padding: 0 0 64px;
+            opacity: 0;
+            animation: fadeIn 0.8s ease 0.7s forwards;
+        }
+
+        .how-label {
             font-size: 10px;
             letter-spacing: 0.1em;
             text-transform: uppercase;
             color: var(--accent-dim);
-            margin-bottom: 10px;
+            margin-bottom: 16px;
         }
 
-        .module-name {
+        .how-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .how-step {
+            display: flex;
+            gap: 16px;
+            align-items: baseline;
+        }
+
+        .step-num {
             font-family: var(--serif);
-            font-size: 18px;
             font-style: italic;
-            color: var(--text);
-            margin-bottom: 8px;
+            font-size: 24px;
+            color: var(--accent-dim);
+            min-width: 28px;
         }
 
-        .module-desc {
-            font-size: 12px;
+        .step-text {
+            font-size: 13px;
             line-height: 1.6;
             color: var(--text-muted);
+        }
+
+        .step-text strong {
+            color: var(--text);
+            font-weight: 400;
+        }
+
+        .step-code {
+            font-family: var(--mono);
+            font-size: 12px;
+            color: var(--accent-dim);
+            background: var(--surface);
+            padding: 2px 6px;
+            border-radius: 3px;
+            border: 1px solid var(--border);
         }
 
         /* Signup */
@@ -258,7 +344,6 @@
             opacity: 0.5;
         }
 
-        /* Footer */
         footer {
             padding: 48px 0;
             border-top: 1px solid var(--border);
@@ -285,22 +370,19 @@
 
         footer a:hover { opacity: 1; }
 
-        /* Animations */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(12px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Mobile */
         @media (max-width: 520px) {
-            .module-grid { grid-template-columns: 1fr; }
+            .metric-grid { grid-template-columns: 1fr; }
             .signup-form { flex-direction: column; }
             .signup-form button { padding: 14px 24px; }
             header { padding-top: 32px; }
             .hero { padding: 56px 0 48px; }
         }
 
-        /* Success state */
         .signup-success {
             display: none;
             font-size: 13px;
@@ -325,31 +407,70 @@
         </header>
 
         <section class="hero">
-            <h1>Production infrastructure for <em>AI memory</em></h1>
-            <p>Algorithms for memory consolidation, retrieval, and decay are published. The production plumbing is missing. We're building the observability, lifecycle management, and evaluation tools that AI systems need to remember well.</p>
+            <h1>See what your AI <em>actually remembers</em></h1>
+            <p>Your Mem0 instance stores and retrieves memories. But is it working well? Engram instruments every operation — hit rates, score distributions, staleness, dead memories — so you stop guessing and start measuring.</p>
         </section>
 
-        <section class="modules">
-            <div class="module-grid">
-                <div class="module">
-                    <div class="module-label">01</div>
-                    <div class="module-name">Observability</div>
-                    <div class="module-desc">Memory quality, freshness, retrieval hit rates, staleness, redundancy. See what your AI actually remembers.</div>
+        <section class="code-section">
+            <div class="code-label">Drop-in. One line changes.</div>
+            <div class="code-block">
+<span class="comment"># Before</span>
+<span class="keyword">from</span> <span class="highlight">mem0</span> <span class="keyword">import</span> MemoryClient
+client = MemoryClient(api_key=<span class="string">"..."</span>)
+
+<span class="comment"># After</span>
+<span class="keyword">from</span> <span class="highlight">engramlabs</span> <span class="keyword">import</span> InstrumentedMem0
+client = InstrumentedMem0(MemoryClient(api_key=<span class="string">"..."</span>))
+
+<span class="comment"># Same API. Now you can see everything.</span>
+results = client.search(<span class="string">"dietary preferences"</span>, user_id=<span class="string">"user123"</span>)
+            </div>
+        </section>
+
+        <section class="metrics">
+            <div class="metrics-label">What you'll see</div>
+            <div class="metric-grid">
+                <div class="metric">
+                    <div class="metric-name">Hit Rate</div>
+                    <div class="metric-desc">% of searches returning relevant results above your score threshold.</div>
                 </div>
-                <div class="module">
-                    <div class="module-label">02</div>
-                    <div class="module-name">Evaluation</div>
-                    <div class="module-desc">Retrieval benchmarks, regression testing, strategy comparison. Know if your memory system is getting better or worse.</div>
+                <div class="metric">
+                    <div class="metric-name">Score Distribution</div>
+                    <div class="metric-desc">Are your top results actually good? See the spread across every search.</div>
                 </div>
-                <div class="module">
-                    <div class="module-label">03</div>
-                    <div class="module-name">Lifecycle</div>
-                    <div class="module-desc">Formation, consolidation, decay, deduplication. ETL pipelines for memories, not just data.</div>
+                <div class="metric">
+                    <div class="metric-name">Dead Memories</div>
+                    <div class="metric-desc">Memories stored but never retrieved. Find the waste, clean it up.</div>
                 </div>
-                <div class="module">
-                    <div class="module-label">04</div>
-                    <div class="module-name">Context Assembly</div>
-                    <div class="module-desc">Optimal context window packing within token budgets. The right memories, at the right time, in the right amount.</div>
+                <div class="metric">
+                    <div class="metric-name">Staleness</div>
+                    <div class="metric-desc">Age distribution of retrieved memories. Are you serving stale context?</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-name">Redundancy</div>
+                    <div class="metric-desc">Duplicate content detection. Stop storing the same memory twice.</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-name">Latency</div>
+                    <div class="metric-desc">p50, p95, p99 for every operation. Know when things slow down.</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="how">
+            <div class="how-label">How it works</div>
+            <div class="how-steps">
+                <div class="how-step">
+                    <div class="step-num">1</div>
+                    <div class="step-text"><strong>Wrap your Mem0 client.</strong> One import change. Works with both OSS and Platform.</div>
+                </div>
+                <div class="how-step">
+                    <div class="step-num">2</div>
+                    <div class="step-text"><strong>Use Mem0 normally.</strong> Every add, search, update, and delete is silently instrumented.</div>
+                </div>
+                <div class="how-step">
+                    <div class="step-num">3</div>
+                    <div class="step-text"><strong>Run <span class="step-code">engram report</span></strong> for an instant health check — or connect Grafana for live dashboards.</div>
                 </div>
             </div>
         </section>
